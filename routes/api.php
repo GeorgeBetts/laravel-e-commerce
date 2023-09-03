@@ -20,9 +20,8 @@ Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
 });
 
 Route::resource('products', ProductController::class)
-    ->only(['index', 'show'])
-    ->middleware(['auth:sanctum']);
+    ->only(['index', 'show']);
 
 Route::resource('products', ProductController::class)
-    ->only(['store'])
+    ->only(['store', 'update', 'destroy'])
     ->middleware(['auth:sanctum']);

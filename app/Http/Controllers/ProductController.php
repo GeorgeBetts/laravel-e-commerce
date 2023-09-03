@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreProductRequest;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -13,20 +14,19 @@ class ProductController extends Controller
      */
     public function index(): Response
     {
-        $products = Product::all();
+        $products = Product::paginate(15);
         return response($products);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreProductRequest $request)
     {
-        // validate the request data
-        $validated = $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-        ]);
+        // get the validated data
+        $validated = $request->validated();
 
+        // save to the product
         $product = Product::create($validated);
 
         return $product;
@@ -43,9 +43,15 @@ class ProductController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Product $product)
+    public function update(StoreProductRequest $request, Product $product)
     {
-        //
+        // get the validated data
+        $validated = $request->validated();
+
+        // save to the product
+        $product->update($validated);
+
+        return $product;
     }
 
     /**
@@ -53,6 +59,8 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
-        //
+        $product->delete();
+
+        return response(null, 204);
     }
 }
