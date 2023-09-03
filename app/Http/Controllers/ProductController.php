@@ -2,19 +2,41 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreProductRequest;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\DB;
+use App\Http\Requests\StoreProductRequest;
 
 class ProductController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index(): Response
+    public function index(Request $request): Response
     {
-        $products = Product::paginate(15);
+        // Validate query params
+        $request->validate([
+            'search' => 'string|max:255',
+            'sort_column' => ['string', 'required_with:sort_direction'],
+            'sort_direction' => [Rule::in(['ASC', 'DESC']), 'required_with:sort_column'],
+        ]);
+
+        $query = DB::table('products');
+
+        // Filter on product name
+        if ($request->has('search')) {
+            $query->where('name', 'like', '%' . $request->search . '%');
+        }
+
+        // Sort query
+        if ($request->has('sort_column') && $request->has('sort_direction')) {
+            $query->orderBy($request->sort_column, $request->sort_direction);
+        }
+
+        $products = $query->paginate(15);
+
         return response($products);
     }
 
