@@ -34,7 +34,7 @@ To interact with the API I recommend using Postman. I have created a public work
 
 ![Postman endpoints](image.png)
 
-## Authorisation
+## Authentication
 For authentication I am using [Laravel Sanctum SPA web authentication](https://laravel.com/docs/9.x/sanctum#how-it-works-spa-authentication) which is a stateful authentication using Laravels built-in cookie based session authentication.
 
 Using Sanctum this way is a simple way to have an API backend for an SPA which I would also control. This provides the benefit of having CSRF protection while still allowing the same API to be used with stateless token based authentication.
