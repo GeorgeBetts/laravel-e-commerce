@@ -98,7 +98,7 @@ Validation is in place to ensure product exists when it is added to the cart.
 ### Checkout
 The POST endpoint `/api/checkout` allows a user to purchase the current contents of the shopping cart. This will first be validated and then saved to the `orders` and `order_products` tables. 
 
-Payment services have been simulated by randomly retrning whether it succeded or failed. See the `OrderController.php` for more details of the order process.
+Payment services have been simulated by randomly returning whether it succeded or failed. See the `OrderController.php` for more details of the order process.
 
 Order details won't be saved on an unsuccessful purchase, but if success was chosen randomly then if you take a look at the `orders` table, the order should be visible, the `order_products` table will display the products from this order, and the users shopping cart will be cleared.
 
