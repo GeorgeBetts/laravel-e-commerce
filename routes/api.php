@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ShoppingCart;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,3 +26,9 @@ Route::resource('products', ProductController::class)
 Route::resource('products', ProductController::class)
     ->only(['store', 'update', 'destroy'])
     ->middleware(['auth:sanctum']);
+
+Route::controller(ShoppingCart::class)->group(function () {
+    Route::get('/cart', 'index');
+    Route::post('/cart', 'store');
+    Route::delete('/cart', 'destroy');
+});
