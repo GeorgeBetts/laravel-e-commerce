@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\StoreProductRequest;
 
 class ProductController extends Controller
@@ -49,7 +50,9 @@ class ProductController extends Controller
         $validated = $request->validated();
 
         // save to the product
-        $product = Product::create($validated);
+        $product = new Product($validated);
+        $product->user_id = Auth::user()->id;
+        $product->save();
 
         return $product;
     }
@@ -67,6 +70,9 @@ class ProductController extends Controller
      */
     public function update(StoreProductRequest $request, Product $product)
     {
+        // check user is authorised
+        $this->authorize('update', $product);
+
         // get the validated data
         $validated = $request->validated();
 
